@@ -1,4 +1,3 @@
-using NonStandard.Extension;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -16,21 +15,21 @@ public class TestControl : MonoBehaviour {
 	public void Start() {
 		rb = GetComponent<Rigidbody>();
 		//inputActions = new Test_InputActions();
-		//inputActions.Player.Enable();
-		//inputActions.Player.Jump.performed += Jump_performed;
-		//inputActions.Player.Movement.Enable();
-		////inputActions.Player.Movement.performed += Movement_performed;
-		////inputActions.Player.Movement.canceled += Movement_performed;
-		//inputActions.Player.RunSpeed.started += c => running = true;
-		//inputActions.Player.RunSpeed.canceled += c => running = false;
+		//inputActions.Agent.Enable();
+		//inputActions.Agent.Jump.performed += Jump_performed;
+		//inputActions.Agent.Movement.Enable();
+		////inputActions.Agent.Movement.performed += Movement_performed;
+		////inputActions.Agent.Movement.canceled += Movement_performed;
+		//inputActions.Agent.RunSpeed.started += c => running = true;
+		//inputActions.Agent.RunSpeed.canceled += c => running = false;
 		//controlsText.text = inputActions.bindings.JoinToString("\n");
 	}
 
 	private void Update() {
 		if (inputActions != null) {
-			moveVector = inputActions.Player.Movement.ReadValue<Vector2>();
+			moveVector = inputActions.Agent.Movement.ReadValue<Vector2>();
 		}
-		//InputAction movement = inputActions.Player.Movement;
+		//InputAction movement = inputActions.Agent.Movement;
 		//ProcessMovement(m);
 		//inputText.text = m.ToString() + " " + movement.enabled + " " + movement.activeControl + " ";
 

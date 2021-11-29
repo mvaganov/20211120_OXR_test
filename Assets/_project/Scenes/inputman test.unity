@@ -251,6 +251,7 @@ MonoBehaviour:
   angleSnapStickiness: 15
   distanceSnap: 0.125
   distanceSnapStickiness: 0.125
+  activeRod: {fileID: 0}
 --- !u!4 &55942408
 Transform:
   m_ObjectHideFlags: 0
@@ -279,7 +280,6 @@ GameObject:
   m_Component:
   - component: {fileID: 77522225}
   - component: {fileID: 77522224}
-  - component: {fileID: 77522227}
   - component: {fileID: 77522226}
   - component: {fileID: 77522228}
   m_Layer: 0
@@ -351,15 +351,51 @@ MonoBehaviour:
       m_Calls: []
   m_ActionEvents:
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 277263161}
+        m_TargetAssemblyTypeName: TestControl, Assembly-CSharp
+        m_MethodName: Jump
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: f0e6553a-ce72-4490-880f-63fc0d750a5a
     m_ActionName: Player/Jump[/Keyboard/space,/Mouse/rightButton]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 277263161}
+        m_TargetAssemblyTypeName: TestControl, Assembly-CSharp
+        m_MethodName: Movement
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: b72956d1-c28d-4f0b-be99-74b29d184bd6
     m_ActionName: Player/Movement[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 277263161}
+        m_TargetAssemblyTypeName: TestControl, Assembly-CSharp
+        m_MethodName: Move_RunHold
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 6307fd91-9b40-4318-99e2-5dc9f9f3d63e
     m_ActionName: Player/RunSpeed[/Keyboard/shift]
   - m_PersistentCalls:
@@ -474,23 +510,59 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: c49859de-12ee-450d-8baa-b985f8f766d5
     m_ActionName: RightStickTurret/Backward
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 55942407}
+        m_TargetAssemblyTypeName: TestVrController, Assembly-CSharp
+        m_MethodName: CreateRod
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 5080754d-9d0e-48f9-a17d-d20f53ded014
+    m_ActionName: RodDraw/New action
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 55942407}
+        m_TargetAssemblyTypeName: TestVrController, Assembly-CSharp
+        m_MethodName: Grab
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: bfc97301-1c0a-4380-a379-17274a8d904b
+    m_ActionName: Grab/Grab
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 77522228}
+        m_TargetAssemblyTypeName: PlayerInputEnable, Assembly-CSharp
+        m_MethodName: NextActionGroup
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: e52a8786-df0d-4814-a497-d4b70a9212c0
+    m_ActionName: Next/NextMapButton
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: VR
   m_DefaultActionMap: VR
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 355780662}
---- !u!114 &77522227
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 77522223}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76d18da032c2d4c45b1a72266f72b7ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &77522228
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -503,16 +575,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f7f1a862169cfd458c0887b8d058a6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputNames:
-  - VR
-  - RightStickTurret
-  actionMaps:
-  - name: Player
-    enabled: 0
-  - name: VR
-    enabled: 1
-  - name: RightStickTurret
-    enabled: 1
+  actionGroupIndex: 0
+  actionGroups:
+  - name: ControlTurret
+    actionMaps:
+    - name: Agent
+      state: 0
+    - name: VR
+      state: 1
+    - name: Grab
+      state: 1
+    - name: RightStickTurret
+      state: 1
+    - name: RodDraw
+      state: 0
+    - name: Next
+      state: 1
+  - name: DrawRods
+    actionMaps:
+    - name: Agent
+      state: 0
+    - name: VR
+      state: 1
+    - name: Grab
+      state: 1
+    - name: RightStickTurret
+      state: 0
+    - name: RodDraw
+      state: 1
+    - name: Next
+      state: 1
+  - name: ControlAgent
+    actionMaps:
+    - name: Agent
+      state: 1
+    - name: VR
+      state: 1
+    - name: Grab
+      state: 1
+    - name: RightStickTurret
+      state: 0
+    - name: RodDraw
+      state: 0
+    - name: Next
+      state: 1
 --- !u!1 &161708582
 GameObject:
   m_ObjectHideFlags: 0
@@ -721,6 +827,7 @@ GameObject:
   - component: {fileID: 277263163}
   - component: {fileID: 277263162}
   - component: {fileID: 277263161}
+  - component: {fileID: 277263167}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Untagged
@@ -840,6 +947,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &277263167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 277263159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 381b9487e7126c541ab64abdb2f4a3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &355780660
 GameObject:
   m_ObjectHideFlags: 0
@@ -1941,6 +2060,7 @@ MonoBehaviour:
   angleSnapStickiness: 5
   distanceSnap: 0.125
   distanceSnapStickiness: 0.0625
+  activeRod: {fileID: 0}
 --- !u!4 &1158003804
 Transform:
   m_ObjectHideFlags: 0

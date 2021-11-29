@@ -24,7 +24,7 @@ public partial class @Test_InputActions : IInputActionCollection2, IDisposable
     ""name"": ""test_InputActions"",
     ""maps"": [
         {
-            ""name"": ""Player"",
+            ""name"": ""Agent"",
             ""id"": ""56011619-3931-4cfd-8c16-6b9a8b98e3ac"",
             ""actions"": [
                 {
@@ -114,7 +114,7 @@ public partial class @Test_InputActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""a9519881-bcf7-42ff-b762-10a8f0c0c87f"",
-                    ""path"": ""<XRController>{RightHand}/triggerPressed"",
+                    ""path"": ""<XRController>{RightHand}/gripPressed"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""VR"",
@@ -334,6 +334,34 @@ public partial class @Test_InputActions : IInputActionCollection2, IDisposable
             ]
         },
         {
+            ""name"": ""Grab"",
+            ""id"": ""529762fa-290d-4daf-9680-78daf8a5f5d7"",
+            ""actions"": [
+                {
+                    ""name"": ""Grab"",
+                    ""type"": ""Button"",
+                    ""id"": ""bfc97301-1c0a-4380-a379-17274a8d904b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": ""Invert"",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""985a1e65-632a-47a4-891d-588765792dd7"",
+                    ""path"": ""<XRController>{RightHand}/gripPressed"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""VR"",
+                    ""action"": ""Grab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
             ""name"": ""RightStickTurret"",
             ""id"": ""2e5c149f-5aad-40a3-bee6-5c0a59b88aea"",
             ""actions"": [
@@ -357,9 +385,9 @@ public partial class @Test_InputActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Backward"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""c49859de-12ee-450d-8baa-b985f8f766d5"",
-                    ""expectedControlType"": ""Analog"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": ""Invert"",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -391,11 +419,67 @@ public partial class @Test_InputActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""89d9eaa2-a19b-43f9-9e55-bcce8ff14ee7"",
-                    ""path"": ""<OculusTouchController>/grip"",
+                    ""path"": ""<XRController>{RightHand}/thumbstickClicked"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""VR"",
                     ""action"": ""Backward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""RodDraw"",
+            ""id"": ""818b4bc9-d5fa-444d-a82a-94f0721ac830"",
+            ""actions"": [
+                {
+                    ""name"": ""Draw"",
+                    ""type"": ""Value"",
+                    ""id"": ""5080754d-9d0e-48f9-a17d-d20f53ded014"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""258ecc56-cb42-408c-81f7-73188fe145af"",
+                    ""path"": ""<XRController>{RightHand}/primaryButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Draw"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Next"",
+            ""id"": ""ee78c8b3-dedc-46fb-aa20-a25da0d0dc5c"",
+            ""actions"": [
+                {
+                    ""name"": ""NextMapButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""e52a8786-df0d-4814-a497-d4b70a9212c0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""773e5030-86e4-436f-bbbb-117b0cfe59fe"",
+                    ""path"": ""<XRController>{RightHand}/secondaryButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextMapButton"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -431,22 +515,31 @@ public partial class @Test_InputActions : IInputActionCollection2, IDisposable
         }
     ]
 }");
-        // Player
-        m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-        m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
-        m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
-        m_Player_RunSpeed = m_Player.FindAction("RunSpeed", throwIfNotFound: true);
+        // Agent
+        m_Agent = asset.FindActionMap("Agent", throwIfNotFound: true);
+        m_Agent_Jump = m_Agent.FindAction("Jump", throwIfNotFound: true);
+        m_Agent_Movement = m_Agent.FindAction("Movement", throwIfNotFound: true);
+        m_Agent_RunSpeed = m_Agent.FindAction("RunSpeed", throwIfNotFound: true);
         // VR
         m_VR = asset.FindActionMap("VR", throwIfNotFound: true);
         m_VR_LeftRotation = m_VR.FindAction("LeftRotation", throwIfNotFound: true);
         m_VR_RightRotation = m_VR.FindAction("RightRotation", throwIfNotFound: true);
         m_VR_LeftPosition = m_VR.FindAction("LeftPosition", throwIfNotFound: true);
         m_VR_RightPosition = m_VR.FindAction("RightPosition", throwIfNotFound: true);
+        // Grab
+        m_Grab = asset.FindActionMap("Grab", throwIfNotFound: true);
+        m_Grab_Grab = m_Grab.FindAction("Grab", throwIfNotFound: true);
         // RightStickTurret
         m_RightStickTurret = asset.FindActionMap("RightStickTurret", throwIfNotFound: true);
         m_RightStickTurret_TurretTurn = m_RightStickTurret.FindAction("TurretTurn", throwIfNotFound: true);
         m_RightStickTurret_Forward = m_RightStickTurret.FindAction("Forward", throwIfNotFound: true);
         m_RightStickTurret_Backward = m_RightStickTurret.FindAction("Backward", throwIfNotFound: true);
+        // RodDraw
+        m_RodDraw = asset.FindActionMap("RodDraw", throwIfNotFound: true);
+        m_RodDraw_Draw = m_RodDraw.FindAction("Draw", throwIfNotFound: true);
+        // Next
+        m_Next = asset.FindActionMap("Next", throwIfNotFound: true);
+        m_Next_NextMapButton = m_Next.FindAction("NextMapButton", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -503,39 +596,39 @@ public partial class @Test_InputActions : IInputActionCollection2, IDisposable
         return asset.FindBinding(bindingMask, out action);
     }
 
-    // Player
-    private readonly InputActionMap m_Player;
-    private IPlayerActions m_PlayerActionsCallbackInterface;
-    private readonly InputAction m_Player_Jump;
-    private readonly InputAction m_Player_Movement;
-    private readonly InputAction m_Player_RunSpeed;
-    public struct PlayerActions
+    // Agent
+    private readonly InputActionMap m_Agent;
+    private IAgentActions m_AgentActionsCallbackInterface;
+    private readonly InputAction m_Agent_Jump;
+    private readonly InputAction m_Agent_Movement;
+    private readonly InputAction m_Agent_RunSpeed;
+    public struct AgentActions
     {
         private @Test_InputActions m_Wrapper;
-        public PlayerActions(@Test_InputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Jump => m_Wrapper.m_Player_Jump;
-        public InputAction @Movement => m_Wrapper.m_Player_Movement;
-        public InputAction @RunSpeed => m_Wrapper.m_Player_RunSpeed;
-        public InputActionMap Get() { return m_Wrapper.m_Player; }
+        public AgentActions(@Test_InputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Jump => m_Wrapper.m_Agent_Jump;
+        public InputAction @Movement => m_Wrapper.m_Agent_Movement;
+        public InputAction @RunSpeed => m_Wrapper.m_Agent_RunSpeed;
+        public InputActionMap Get() { return m_Wrapper.m_Agent; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(PlayerActions set) { return set.Get(); }
-        public void SetCallbacks(IPlayerActions instance)
+        public static implicit operator InputActionMap(AgentActions set) { return set.Get(); }
+        public void SetCallbacks(IAgentActions instance)
         {
-            if (m_Wrapper.m_PlayerActionsCallbackInterface != null)
+            if (m_Wrapper.m_AgentActionsCallbackInterface != null)
             {
-                @Jump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                @Jump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                @Jump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                @Movement.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
-                @Movement.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
-                @Movement.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
-                @RunSpeed.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRunSpeed;
-                @RunSpeed.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRunSpeed;
-                @RunSpeed.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRunSpeed;
+                @Jump.started -= m_Wrapper.m_AgentActionsCallbackInterface.OnJump;
+                @Jump.performed -= m_Wrapper.m_AgentActionsCallbackInterface.OnJump;
+                @Jump.canceled -= m_Wrapper.m_AgentActionsCallbackInterface.OnJump;
+                @Movement.started -= m_Wrapper.m_AgentActionsCallbackInterface.OnMovement;
+                @Movement.performed -= m_Wrapper.m_AgentActionsCallbackInterface.OnMovement;
+                @Movement.canceled -= m_Wrapper.m_AgentActionsCallbackInterface.OnMovement;
+                @RunSpeed.started -= m_Wrapper.m_AgentActionsCallbackInterface.OnRunSpeed;
+                @RunSpeed.performed -= m_Wrapper.m_AgentActionsCallbackInterface.OnRunSpeed;
+                @RunSpeed.canceled -= m_Wrapper.m_AgentActionsCallbackInterface.OnRunSpeed;
             }
-            m_Wrapper.m_PlayerActionsCallbackInterface = instance;
+            m_Wrapper.m_AgentActionsCallbackInterface = instance;
             if (instance != null)
             {
                 @Jump.started += instance.OnJump;
@@ -550,7 +643,7 @@ public partial class @Test_InputActions : IInputActionCollection2, IDisposable
             }
         }
     }
-    public PlayerActions @Player => new PlayerActions(this);
+    public AgentActions @Agent => new AgentActions(this);
 
     // VR
     private readonly InputActionMap m_VR;
@@ -609,6 +702,39 @@ public partial class @Test_InputActions : IInputActionCollection2, IDisposable
     }
     public VRActions @VR => new VRActions(this);
 
+    // Grab
+    private readonly InputActionMap m_Grab;
+    private IGrabActions m_GrabActionsCallbackInterface;
+    private readonly InputAction m_Grab_Grab;
+    public struct GrabActions
+    {
+        private @Test_InputActions m_Wrapper;
+        public GrabActions(@Test_InputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Grab => m_Wrapper.m_Grab_Grab;
+        public InputActionMap Get() { return m_Wrapper.m_Grab; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(GrabActions set) { return set.Get(); }
+        public void SetCallbacks(IGrabActions instance)
+        {
+            if (m_Wrapper.m_GrabActionsCallbackInterface != null)
+            {
+                @Grab.started -= m_Wrapper.m_GrabActionsCallbackInterface.OnGrab;
+                @Grab.performed -= m_Wrapper.m_GrabActionsCallbackInterface.OnGrab;
+                @Grab.canceled -= m_Wrapper.m_GrabActionsCallbackInterface.OnGrab;
+            }
+            m_Wrapper.m_GrabActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Grab.started += instance.OnGrab;
+                @Grab.performed += instance.OnGrab;
+                @Grab.canceled += instance.OnGrab;
+            }
+        }
+    }
+    public GrabActions @Grab => new GrabActions(this);
+
     // RightStickTurret
     private readonly InputActionMap m_RightStickTurret;
     private IRightStickTurretActions m_RightStickTurretActionsCallbackInterface;
@@ -657,6 +783,72 @@ public partial class @Test_InputActions : IInputActionCollection2, IDisposable
         }
     }
     public RightStickTurretActions @RightStickTurret => new RightStickTurretActions(this);
+
+    // RodDraw
+    private readonly InputActionMap m_RodDraw;
+    private IRodDrawActions m_RodDrawActionsCallbackInterface;
+    private readonly InputAction m_RodDraw_Draw;
+    public struct RodDrawActions
+    {
+        private @Test_InputActions m_Wrapper;
+        public RodDrawActions(@Test_InputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Draw => m_Wrapper.m_RodDraw_Draw;
+        public InputActionMap Get() { return m_Wrapper.m_RodDraw; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(RodDrawActions set) { return set.Get(); }
+        public void SetCallbacks(IRodDrawActions instance)
+        {
+            if (m_Wrapper.m_RodDrawActionsCallbackInterface != null)
+            {
+                @Draw.started -= m_Wrapper.m_RodDrawActionsCallbackInterface.OnDraw;
+                @Draw.performed -= m_Wrapper.m_RodDrawActionsCallbackInterface.OnDraw;
+                @Draw.canceled -= m_Wrapper.m_RodDrawActionsCallbackInterface.OnDraw;
+            }
+            m_Wrapper.m_RodDrawActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Draw.started += instance.OnDraw;
+                @Draw.performed += instance.OnDraw;
+                @Draw.canceled += instance.OnDraw;
+            }
+        }
+    }
+    public RodDrawActions @RodDraw => new RodDrawActions(this);
+
+    // Next
+    private readonly InputActionMap m_Next;
+    private INextActions m_NextActionsCallbackInterface;
+    private readonly InputAction m_Next_NextMapButton;
+    public struct NextActions
+    {
+        private @Test_InputActions m_Wrapper;
+        public NextActions(@Test_InputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @NextMapButton => m_Wrapper.m_Next_NextMapButton;
+        public InputActionMap Get() { return m_Wrapper.m_Next; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(NextActions set) { return set.Get(); }
+        public void SetCallbacks(INextActions instance)
+        {
+            if (m_Wrapper.m_NextActionsCallbackInterface != null)
+            {
+                @NextMapButton.started -= m_Wrapper.m_NextActionsCallbackInterface.OnNextMapButton;
+                @NextMapButton.performed -= m_Wrapper.m_NextActionsCallbackInterface.OnNextMapButton;
+                @NextMapButton.canceled -= m_Wrapper.m_NextActionsCallbackInterface.OnNextMapButton;
+            }
+            m_Wrapper.m_NextActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @NextMapButton.started += instance.OnNextMapButton;
+                @NextMapButton.performed += instance.OnNextMapButton;
+                @NextMapButton.canceled += instance.OnNextMapButton;
+            }
+        }
+    }
+    public NextActions @Next => new NextActions(this);
     private int m_VRSchemeIndex = -1;
     public InputControlScheme VRScheme
     {
@@ -675,7 +867,7 @@ public partial class @Test_InputActions : IInputActionCollection2, IDisposable
             return asset.controlSchemes[m_DesktopSchemeIndex];
         }
     }
-    public interface IPlayerActions
+    public interface IAgentActions
     {
         void OnJump(InputAction.CallbackContext context);
         void OnMovement(InputAction.CallbackContext context);
@@ -688,10 +880,22 @@ public partial class @Test_InputActions : IInputActionCollection2, IDisposable
         void OnLeftPosition(InputAction.CallbackContext context);
         void OnRightPosition(InputAction.CallbackContext context);
     }
+    public interface IGrabActions
+    {
+        void OnGrab(InputAction.CallbackContext context);
+    }
     public interface IRightStickTurretActions
     {
         void OnTurretTurn(InputAction.CallbackContext context);
         void OnForward(InputAction.CallbackContext context);
         void OnBackward(InputAction.CallbackContext context);
+    }
+    public interface IRodDrawActions
+    {
+        void OnDraw(InputAction.CallbackContext context);
+    }
+    public interface INextActions
+    {
+        void OnNextMapButton(InputAction.CallbackContext context);
     }
 }

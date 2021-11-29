@@ -725,6 +725,47 @@ namespace NonStandard {
 			return n;
 		}
 
+		public static void IncrementWithSnap(ref float value, float change, ref float snapProgress, float snap, float angleSnapStickiness) {
+			if (change == 0) return;
+			float lowerBound, upperBound;
+			if (value >= 0) {
+				lowerBound = Math3d.RoundDownToNearest(value, snap);
+				upperBound = (lowerBound == value) ? value : Math3d.RoundUpToNearest(value, snap);
+			} else {
+				upperBound = Math3d.RoundUpToNearest(value, snap);
+				lowerBound = (upperBound == value) ? value : Math3d.RoundDownToNearest(value, snap);
+			}
+			IncrementWithSnap(ref value, lowerBound, upperBound, change, ref snapProgress, angleSnapStickiness);
+		}
+		public static void IncrementWithSnap(ref float value, float lowerBound, float upperBound, float change, ref float snapProgress, float angleSnapStickiness) {
+			float excess;
+			float newValue = value + change;
+			if (change < 0) {
+				if (newValue < lowerBound) {
+					excess = newValue - lowerBound;
+					snapProgress += excess;
+					newValue = lowerBound;
+				}
+				if (snapProgress < -angleSnapStickiness) {
+					excess = snapProgress + angleSnapStickiness;
+					newValue += excess;
+					snapProgress = 0;
+				}
+			} else {
+				if (newValue > upperBound) {
+					excess = newValue - upperBound;
+					snapProgress += excess;
+					newValue = upperBound;
+				}
+				if (snapProgress > +angleSnapStickiness) {
+					excess = snapProgress - angleSnapStickiness;
+					newValue += excess;
+					snapProgress = 0;
+				}
+			}
+			value = newValue;
+		}
+
 		/// <summary>
 		/// used to check equality of two floats that are not expected to be assigned as powers of 2
 		/// </summary>
@@ -865,7 +906,7 @@ namespace NonStandard {
 namespace NonStandard {
 	/// <summary>cached calculations. used to validate if a line needs to be re-calculated</summary>
 	public class Wire : MonoBehaviour {
-		public enum Kind { None, Line, Arc, Orbital, SpiralSphere, Box, Quaternion, CartesianPlane, Rectangle, Disabled }
+		public enum Kind { None, Line, Arc, Orbital, SpiralSphere, Box, Quaternion, CartesianPlane, Rectangle, Rod, Disabled }
 		private Kind _kind;
 		private Vector3[] _points;
 		private Vector3 _normal;
@@ -881,6 +922,23 @@ namespace NonStandard {
 		// ReSharper disable once NotAccessedField.Global
 		public string sourceCode;
 #endif
+		public Vector3 StartPoint {
+			get {
+                switch (_kind) {
+					case Kind.Rod: return transform.position + _points[0];
+					default: return _points[0];
+                }
+			}
+		}
+		public Vector3 EndPoint {
+			get {
+                switch (_kind) {
+					case Kind.Rod: return transform.position + _points[_points.Length - 1];
+					default: return _points[_points.Length - 1];
+                }
+			}
+        }
+
 		public int NumCapVertices {
 			get => lr.numCapVertices;
 			set => lr.numCapVertices = value;
@@ -929,6 +987,16 @@ namespace NonStandard {
 			for (int i = 0; i < a.Count; ++i) { if (a[i] != b[i]) return false; }
 			return true;
 		}
+		private static bool SameArrayOfVectors(IList<Vector3> a, IList<Vector3> b, Quaternion rotateA, Vector3 offsetA = default) {
+			if (ReferenceEquals(a, b)) { return true; }
+			if (a == null || b == null || a.Count != b.Count) { return false; }
+			for (int i = 0; i < a.Count; ++i) { if (rotateA * a[i] + offsetA != b[i] ) return false; }
+			return true;
+		}
+		private bool IsRod(IList<Vector3> points, float startSize, float endSize, Lines.End lineEnds) {
+			return kind == Kind.Rod && SameArrayOfVectors(_points, points, transform.rotation, transform.position)
+				&& Math3d.EQ(startSize - _startSize) && Math3d.EQ(endSize - _endSize) && _lineEnds == lineEnds;
+		}
 		private bool IsLine(IList<Vector3> points, float startSize, float endSize, Lines.End lineEnds) {
 			return kind == Kind.Line && SameArrayOfVectors(_points, points)
 				&& Math3d.EQ(startSize - _startSize) && Math3d.EQ(endSize - _endSize) && _lineEnds == lineEnds;
@@ -938,6 +1006,33 @@ namespace NonStandard {
 			if (points != null) {
 				_points = new Vector3[points.Count];
 				for (int i = 0; i < _points.Length; ++i) { _points[i] = points[i]; }
+			}
+			//_points = null; // commented this out. was it here for a reason?
+			_startSize = startSize; _endSize = endSize; _lineEnds = lineEnds;
+		}
+		private void SetRod(IList<Vector3> points, float startSize, float endSize, Lines.End lineEnds) {
+			kind = Kind.Rod;
+			if (points != null) {
+				_points = new Vector3[points.Count];
+				Vector3 start = points[0];
+				Vector3 end = points[points.Count - 1];
+				Vector3 delta = end - start;
+				//Lines.Make("rod-delta").Arrow(start, end, Color.black, 1f / 128);
+				float dist = delta.magnitude;
+				Vector3 dir = dist != 0 ? delta / dist : Vector3.forward;
+				Vector3 axisOfRotation = Vector3.Cross(Vector3.forward, dir);
+				//Lines.Make("rod-axis").Line(start, start+axisOfRotation, Color.magenta, 1f / 128);
+				float angleOfRotation;
+				if (axisOfRotation != Vector3.zero) {
+					axisOfRotation = axisOfRotation.normalized;
+					angleOfRotation = Vector3.SignedAngle(Vector3.forward, dir, axisOfRotation);
+				} else { axisOfRotation = Vector3.up; angleOfRotation = 0; }
+				//Lines.Make("rod-angle").Arc(angleOfRotation, axisOfRotation, Vector3.forward/4, start, Color.gray, startSize:1f / 128);
+				Quaternion q = UnityEngine.Quaternion.AngleAxis(angleOfRotation, axisOfRotation);
+				Quaternion unq = UnityEngine.Quaternion.AngleAxis(-angleOfRotation, axisOfRotation);
+				for (int i = 1; i < _points.Length; ++i) { _points[i] = unq * (points[i] - start); }
+				transform.rotation = q;
+				transform.position = start;
 			}
 			//_points = null; // commented this out. was it here for a reason?
 			_startSize = startSize; _endSize = endSize; _lineEnds = lineEnds;
@@ -1028,6 +1123,9 @@ namespace NonStandard {
 		public Wire Line(Vector3 start, Vector3 end, Color color = default, float startSize = Lines.LINE_SIZE, float endSize = Lines.SAME_AS_START_SIZE) {
 			return Line(new Vector3[] { start, end }, color, Lines.End.Normal, startSize, endSize);
 		}
+		public Wire Rod(Vector3 start, Vector3 end, Color color = default, float startSize = Lines.LINE_SIZE, float endSize = Lines.SAME_AS_START_SIZE) {
+			return Rod(new Vector3[] { start, end }, color, Lines.End.Normal, startSize, endSize);
+		}
 		public Wire Arrow(Vector3 start, Vector3 end, Color color = default, float startSize = Lines.LINE_SIZE, float endSize = Lines.SAME_AS_START_SIZE) {
 			return Line(new Vector3[] { start, end }, color, Lines.End.Arrow, startSize, endSize);
 		}
@@ -1050,6 +1148,16 @@ namespace NonStandard {
 				SetLine(points, startSize, endSize, lineEnds);
 				if (!lr) { lr = Lines.MakeLineRenderer(gameObject); }
 				lr = Lines.MakeLine(lr, points, color, startSize, endSize, lineEnds);
+			} //else { Debug.Log("don't need to recalculate line "+name); }
+			if (lr) { Lines.SetColor(lr, color); }
+			return this;
+		}
+		public Wire Rod(IList<Vector3> points, Color color = default, Lines.End lineEnds = default, float startSize = Lines.LINE_SIZE, float endSize = Lines.SAME_AS_START_SIZE) {
+			if (!IsRod(points, startSize, endSize, lineEnds)) {
+				SetRod(points, startSize, endSize, lineEnds);
+				if (!lr) { lr = Lines.MakeLineRenderer(gameObject); }
+				lr = Lines.MakeLine(lr, _points, color, startSize, endSize, lineEnds);
+				lr.useWorldSpace = false;
 			} //else { Debug.Log("don't need to recalculate line "+name); }
 			if (lr) { Lines.SetColor(lr, color); }
 			return this;

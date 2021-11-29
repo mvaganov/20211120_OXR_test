@@ -2,7 +2,7 @@
     "name": "test_InputActions",
     "maps": [
         {
-            "name": "Player",
+            "name": "Agent",
             "id": "56011619-3931-4cfd-8c16-6b9a8b98e3ac",
             "actions": [
                 {
@@ -92,7 +92,7 @@
                 {
                     "name": "",
                     "id": "a9519881-bcf7-42ff-b762-10a8f0c0c87f",
-                    "path": "<XRController>{RightHand}/triggerPressed",
+                    "path": "<XRController>{RightHand}/gripPressed",
                     "interactions": "",
                     "processors": "",
                     "groups": "VR",
@@ -312,6 +312,34 @@
             ]
         },
         {
+            "name": "Grab",
+            "id": "529762fa-290d-4daf-9680-78daf8a5f5d7",
+            "actions": [
+                {
+                    "name": "Grab",
+                    "type": "Button",
+                    "id": "bfc97301-1c0a-4380-a379-17274a8d904b",
+                    "expectedControlType": "Button",
+                    "processors": "Invert",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "985a1e65-632a-47a4-891d-588765792dd7",
+                    "path": "<XRController>{RightHand}/gripPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "VR",
+                    "action": "Grab",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
             "name": "RightStickTurret",
             "id": "2e5c149f-5aad-40a3-bee6-5c0a59b88aea",
             "actions": [
@@ -335,9 +363,9 @@
                 },
                 {
                     "name": "Backward",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "c49859de-12ee-450d-8baa-b985f8f766d5",
-                    "expectedControlType": "Analog",
+                    "expectedControlType": "Button",
                     "processors": "Invert",
                     "interactions": "",
                     "initialStateCheck": true
@@ -369,11 +397,67 @@
                 {
                     "name": "",
                     "id": "89d9eaa2-a19b-43f9-9e55-bcce8ff14ee7",
-                    "path": "<OculusTouchController>/grip",
+                    "path": "<XRController>{RightHand}/thumbstickClicked",
                     "interactions": "",
                     "processors": "",
                     "groups": "VR",
                     "action": "Backward",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "RodDraw",
+            "id": "818b4bc9-d5fa-444d-a82a-94f0721ac830",
+            "actions": [
+                {
+                    "name": "Draw",
+                    "type": "Value",
+                    "id": "5080754d-9d0e-48f9-a17d-d20f53ded014",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "258ecc56-cb42-408c-81f7-73188fe145af",
+                    "path": "<XRController>{RightHand}/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Draw",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Next",
+            "id": "ee78c8b3-dedc-46fb-aa20-a25da0d0dc5c",
+            "actions": [
+                {
+                    "name": "NextMapButton",
+                    "type": "Button",
+                    "id": "e52a8786-df0d-4814-a497-d4b70a9212c0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "773e5030-86e4-436f-bbbb-117b0cfe59fe",
+                    "path": "<XRController>{RightHand}/secondaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "NextMapButton",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

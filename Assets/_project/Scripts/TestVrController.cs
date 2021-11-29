@@ -1,11 +1,11 @@
 using NonStandard;
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class TestVrController : MonoBehaviour {
 	public Collider selector;
+	Grabber grabber;
 	private Vector3 calculatedSelectorPosition;
 	public Turret3d value;
 	public float rotateSpeed = 90;
@@ -15,6 +15,7 @@ public class TestVrController : MonoBehaviour {
 	public bool drawCalculations;
 	public bool useAngleSnap = true;
 	bool turretControlsNeedUpdate = false;
+	bool creatingRod = false;
 
 	public TMP_Text textOutput;
 
@@ -24,6 +25,8 @@ public class TestVrController : MonoBehaviour {
 	public float distanceSnapStickiness = 1f/4;
 	Vector2 angleSnapProgress;
 	float distanceSnapProgress;
+
+	public Rod activeRod;
 
 	public void Calculate(Vector3 position, Vector3 center, Vector3 forward, Vector3 right) {
 		value.Calculate(position, center, forward, right);
@@ -42,19 +45,21 @@ public class TestVrController : MonoBehaviour {
 	private void Start() {
 		if (selector != null) {
 			CalculateSelectorTurret();
+			grabber = selector.GetComponent<Grabber>();
+			if (grabber == null) { grabber = selector.gameObject.AddComponent<Grabber>(); }
 		}
 	}
 	private void Update() {
 		if (distanceChange != 0) {
 			//value.distance += distanceChange * Time.deltaTime;
 			float change = distanceChange * Time.deltaTime;
-			IncrementWithSnap(ref value.distance, change, ref distanceSnapProgress, distanceSnap, distanceSnapStickiness);
+			Math3d.IncrementWithSnap(ref value.distance, change, ref distanceSnapProgress, distanceSnap, distanceSnapStickiness);
 			if (value.distance < 0) { value.distance = 0; }
 		}
 		if (pitchYawChange != Vector2.zero) {
 			Vector2 change = pitchYawChange * rotateSpeed * Time.deltaTime;
-			IncrementWithSnap(ref value.pitchYaw.y, change.y, ref angleSnapProgress.y, angleSnap, angleSnapStickiness);
-			IncrementWithSnap(ref value.pitchYaw.x, change.x, ref angleSnapProgress.x, angleSnap, angleSnapStickiness);
+			Math3d.IncrementWithSnap(ref value.pitchYaw.y, change.y, ref angleSnapProgress.y, angleSnap, angleSnapStickiness);
+			Math3d.IncrementWithSnap(ref value.pitchYaw.x, change.x, ref angleSnapProgress.x, angleSnap, angleSnapStickiness);
 			value.NormalizeAngles();
 		}
 		if (selector != null) {
@@ -73,6 +78,9 @@ public class TestVrController : MonoBehaviour {
 		if (turretControlsNeedUpdate) {
 			CalculateSelectorTurret();
 		}
+        if (creatingRod) {
+			activeRod.end = selector.transform.position;
+        }
 	}
 
 	public void CalculateSelectorTurret() {
@@ -84,54 +92,26 @@ public class TestVrController : MonoBehaviour {
 	}
 
 	public void SetRotation(InputAction.CallbackContext context) {
-		//Debug.Log(context.ToString());
 		transform.localRotation = context.ReadValue<Quaternion>();
 	}
 	public void SetPosition(InputAction.CallbackContext context) {
-		//Debug.Log(context.ToString());
 		transform.localPosition = context.ReadValue<Vector3>();
 	}
 
-	public static void IncrementWithSnap(ref float value, float change, ref float snapProgress, float snap, float angleSnapStickiness) {
-		if (change == 0) return;
-		float lowerBound, upperBound;
-		if (value >= 0) {
-			lowerBound = Math3d.RoundDownToNearest(value, snap);
-			upperBound = (lowerBound == value) ? value : Math3d.RoundUpToNearest(value, snap);
-		} else {
-			upperBound = Math3d.RoundUpToNearest(value, snap);
-			lowerBound = (upperBound == value) ? value : Math3d.RoundDownToNearest(value, snap);
+	public void CreateRod(InputAction.CallbackContext context) {
+        switch (context.phase) {
+			case InputActionPhase.Started:
+				activeRod = Rod.Create(selector.transform.position, Color.yellow);
+				activeRod.SetGrabbable(true);
+				creatingRod = true;
+				break;
+			case InputActionPhase.Canceled:
+				creatingRod = false;
+				activeRod = null;
+				break;
 		}
-		IncrementWithSnap(ref value, lowerBound, upperBound, change, ref snapProgress, angleSnapStickiness);
-	}
-	public static void IncrementWithSnap(ref float value, float lowerBound, float upperBound, float change, ref float snapProgress, float angleSnapStickiness) {
-		float excess;
-		float newValue = value + change;
-		if (change < 0) {
-			if (newValue < lowerBound) {
-				excess = newValue - lowerBound;
-				snapProgress += excess;
-				newValue = lowerBound;
-			}
-			if (snapProgress < -angleSnapStickiness) {
-				excess = snapProgress + angleSnapStickiness;
-				newValue += excess;
-				snapProgress = 0;
-			}
-		} else {
-			if (newValue > upperBound) {
-				excess = newValue - upperBound;
-				snapProgress += excess;
-				newValue = upperBound;
-			}
-			if (snapProgress > +angleSnapStickiness) {
-				excess = snapProgress - angleSnapStickiness;
-				newValue += excess;
-				snapProgress = 0;
-			}
-		}
-		value = newValue;
-	}
+    }
+
 	public void RotateTurretWithJoystick(InputAction.CallbackContext context) {
 		switch (context.phase) {
 		case InputActionPhase.Canceled: pitchYawChange = Vector2.zero; angleSnapProgress = Vector2.zero; break;
@@ -144,5 +124,12 @@ public class TestVrController : MonoBehaviour {
 		case InputActionPhase.Canceled: distanceChange = 0; distanceSnapProgress = 0; return;
 		}
 		distanceChange = context.ReadValue<float>();
+	}
+
+	public void Grab(InputAction.CallbackContext context) {
+		switch (context.phase) {
+			case InputActionPhase.Canceled: grabber.ReleaseGrabbed(); break;
+			case InputActionPhase.Performed: grabber.Grab();          break;
+		}
 	}
 }
